@@ -46,22 +46,7 @@ TP de la séance 2 du module *Digital Forensics* (4IIR, EMSI Tanger, 2026/2027).
 
 ## Le laboratoire
 
-```mermaid
-flowchart LR
-    subgraph HOTE["Poste d'analyse (Windows 11)"]
-        direction TB
-        USB[("Disque externe USB<br/>dossier FORENSIC_USB")]
-        ANA["FTK Imager<br/>Registry Explorer<br/>Get-FileHash"]
-    end
-    subgraph VM["VM victime (Windows 10, sans réseau)"]
-        direction TB
-        C["C: disque système<br/>(source, jamais écrit)"]
-        E["E: dossier partagé<br/>(destination)"]
-    end
-    C -- "FTK Imager · KAPE · tasklist" --> E
-    E === USB
-    USB -- "analyse hors ligne" --> ANA
-```
+![Architecture du laboratoire](docs/diagrams/diagram-architecture.png)
 
 | Rôle | Élément | Détail |
 |---|---|---|
@@ -84,10 +69,7 @@ flowchart LR
 
 L'ordre suit la **RFC 3227** : on capture d'abord ce qui disparaît le plus vite.
 
-```mermaid
-flowchart LR
-    A["1 · RAM<br/>(volatil)"] --> B["2 · Réseau et<br/>processus"] --> C["3 · Disque<br/>complet"] --> D["4 · Triage<br/>KAPE"] --> E["5 · Hash et<br/>Chain of Custody"]
-```
+![Ordre d'acquisition, RFC 3227](docs/diagrams/diagram-methodology.png)
 
 | Ordre | Acquisition | Outil | Sortie |
 |---|---|---|---|
@@ -237,18 +219,7 @@ Toutes les captures de l'exercice 2 : [`docs/evidence.md`](docs/evidence.md#exer
 
 ### Chronologie reconstituée (UTC)
 
-```mermaid
-timeline
-    title 6 octobre 2026 (UTC)
-    17:51 : Installation d'Atomic Red Team
-    17:54 : Test T1059.001-17, PowerShell
-          : cmd.exe lance les commandes
-    17:55 : Test T1547.001-1 — reg.exe écrit la clé Run
-    18:03 : Dump de la RAM
-    18:24 : tasklist
-    18:32 - 19:27 : Image E01
-    19:49 : Triage KAPE
-```
+![Chronologie reconstituée](docs/diagrams/diagram-timeline.png)
 
 | Heure | Événement | Source |
 |---|---|---|
@@ -334,6 +305,7 @@ Pour vérifier une copie : `Get-FileHash -Algorithm SHA256 <fichier>` et compare
     ├── evidence.md                 28 captures annotées, commentées une à une
     ├── chain-of-custody.md         fiches des exercices 1 et 2
     ├── case-notes.md               journal horodaté et réserves
+    ├── diagrams/                   schémas : architecture, méthodologie, chronologie
     └── screenshots/                captures encadrées en rouge (noms floutés)
 ```
 
