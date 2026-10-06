@@ -93,6 +93,8 @@ Pour vérifier une copie : `Get-FileHash -Algorithm SHA256 <fichier>` et compare
 │   └── chain_of_custody.md       fiche vierge, une entrée par preuve
 └── docs/
     ├── methodology.md            procédure détaillée et justifications
+    ├── evidence.md               captures commentées (cadres rouges) et ce qu'elles prouvent
+    ├── screenshots/              9 captures annotées de l'acquisition
     └── case-notes.md             journal, observations, réserves
 ```
 
