@@ -64,15 +64,19 @@ Détail dans [`docs/methodology.md`](docs/methodology.md).
 |---|---|---|
 | Dump mémoire + pagefile | `EVID-2026-S2-RAM-01` | Terminé, hash calculé |
 | État réseau et processus | `EVID-2026-S2-NET-01` | Terminé |
-| Image disque E01 + RAW | `EVID-2026-S2-DISK-01` | En cours |
-| Triage KAPE | `EVID-2026-S2-KAPE-01` | À faire |
+| Image disque E01 + RAW | `EVID-2026-S2-DISK-01` | Terminé, E01 vérifiée, RAW hashé |
+| Triage KAPE | `EVID-2026-S2-KAPE-01` | Terminé (4 010 fichiers, 1,59 Go) |
 
 Empreintes de référence :
 
-| Fichier | SHA-256 |
+| Fichier | Empreinte |
 |---|---|
-| `victime_ram.mem` (4,5 Go) | `6CF7D67661547A56180BD9FBA3433295C6D496BD7C9E6A2668862826C9BA26BB` |
-| `pagefile.sys` (4,75 Go) | `CDC9BAEF85AB35186018B823F61363959D69C652B7CEB0A6438E16BBD35363AE` |
+| `victime_ram.mem` (4,5 Go) | SHA-256 `6CF7D67661547A56180BD9FBA3433295C6D496BD7C9E6A2668862826C9BA26BB` |
+| `pagefile.sys` (4,75 Go) | SHA-256 `CDC9BAEF85AB35186018B823F61363959D69C652B7CEB0A6438E16BBD35363AE` |
+| `image_victime.E01` (14 segments, 19,4 Go) | MD5 `56fabf66617b70a6deb645ec32dacfe6`, SHA-1 `1646228e2fc86efceb9605fcf9f12a7aa15e56b0` (calculé = stocké = rapport, aucun bad block) |
+| `image_victime.raw` (50 Go) | SHA-256 `07A4F34CE8D733D9DEBF185CA1709B2DDE82D8C84724ABA1C476EF9A45DECF48` |
+
+L'image RAW est produite hors ligne (VM éteinte) par conversion du disque virtuel, la méthode « dead » du TP. L'E01 est acquise en live depuis la VM.
 
 Pour vérifier une copie : `Get-FileHash -Algorithm SHA256 <fichier>` et comparer. Un écart impose d'arrêter l'analyse sur cette copie et de documenter la différence.
 
@@ -114,7 +118,6 @@ Prérequis : VirtualBox, un disque de VM Windows 10, un support de 32 Go ou plus
 
 ## Suite du projet
 
-- Triage KAPE et vérification de l'E01.
 - Simulation contrôlée de deux techniques MITRE ATT&CK avec Atomic Red Team (T1059.001 PowerShell, T1547.001 Run Keys), puis corrélation disque, mémoire et registre (Registry Explorer).
 - Analyse de la RAM avec Volatility 3 et du disque avec Autopsy.
 
