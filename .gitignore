@@ -1,0 +1,37 @@
+# Preuves : ne jamais versionner
+*.mem
+*.raw
+*.dd
+*.E01
+*.E02
+*.001
+*.ad1
+*.vdi
+*.vmdk
+*.ova
+pagefile.sys
+hiberfil.sys
+Output/
+Evidence/
+KAPE_Output/
+Exported_Registry/
+
+# Binaires d'outils et dumps
+Tools/
+*.zip
+*.7z
+*.exe
+*.dll
+
+# Sorties brutes contenant des noms de machine ou d'utilisateur
+tasklist.txt
+netstat.txt
+arp.txt
+capture_info.txt
+
+# Divers
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+*.log
