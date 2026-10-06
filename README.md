@@ -1,46 +1,57 @@
-# Digital Forensics Acquisition Lab
+<p align="center">
+  <img src="docs/diagrams/banner.jpg" alt="Digital Forensics Acquisition Lab" width="100%">
+</p>
 
-> Acquisition et préservation de preuves numériques sur une machine Windows 10 virtualisée, puis reconstitution d'un incident simulé à partir du disque, de la mémoire et du registre.
+<h1 align="center">Digital Forensics Acquisition Lab</h1>
 
-![Digital Forensics](https://img.shields.io/badge/Digital%20Forensics-DFIR-1b4332?style=flat-square)
-![RFC 3227](https://img.shields.io/badge/ordre%20de%20volatilit%C3%A9-RFC%203227-1f7a4c?style=flat-square)
-![MITRE ATT&CK](https://img.shields.io/badge/MITRE%20ATT%26CK-T1059.001%20%C2%B7%20T1547.001-c8102e?style=flat-square)
-![FTK Imager](https://img.shields.io/badge/FTK%20Imager-8.3.0.27-444?style=flat-square)
-![KAPE](https://img.shields.io/badge/KAPE-1.3.0.2-444?style=flat-square)
-![Windows 10](https://img.shields.io/badge/cible-Windows%2010-0078d4?style=flat-square)
+<p align="center">
+  Acquisition et préservation de preuves numériques sur une machine Windows 10 virtualisée,<br>
+  puis reconstitution d'un incident simulé à partir du disque, de la mémoire et du registre.
+</p>
 
-TP de la séance 2 du module *Digital Forensics* (4IIR, EMSI Tanger, 2026/2027). Le dépôt documente la démarche de bout en bout : de la préparation du support de collecte à la conclusion forensic, avec **28 captures annotées**, les scripts utilisés et toutes les empreintes de référence.
+<p align="center">
+  <img src="https://img.shields.io/badge/Digital%20Forensics-DFIR-1b4332?style=for-the-badge" alt="Digital Forensics">
+  <img src="https://img.shields.io/badge/RFC%203227-ordre%20de%20volatilit%C3%A9-1f7a4c?style=for-the-badge" alt="RFC 3227">
+  <img src="https://img.shields.io/badge/MITRE%20ATT%26CK-T1059.001%20%C2%B7%20T1547.001-c8102e?style=for-the-badge" alt="MITRE ATT&CK">
+</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/FTK%20Imager-8.3.0.27-2b3a33?style=flat-square" alt="FTK Imager">
+  <img src="https://img.shields.io/badge/KAPE-1.3.0.2-2b3a33?style=flat-square" alt="KAPE">
+  <img src="https://img.shields.io/badge/Registry%20Explorer-2026.5.0-2b3a33?style=flat-square" alt="Registry Explorer">
+  <img src="https://img.shields.io/badge/Atomic%20Red%20Team-2.3.0-2b3a33?style=flat-square" alt="Atomic Red Team">
+  <img src="https://img.shields.io/badge/cible-Windows%2010-0078d4?style=flat-square" alt="Windows 10">
+</p>
 
-> **Aucune preuve brute n'est versionnée.** Dumps mémoire, images disque et collectes restent hors Git (voir [`.gitignore`](.gitignore)). Le dépôt contient la méthode, les scripts, les captures commentées et les empreintes qui permettent de vérifier les preuves.
+<p align="center">
+  <a href="#le-laboratoire"><b>Laboratoire</b></a> ·
+  <a href="#méthodologie"><b>Méthodologie</b></a> ·
+  <a href="#exercice-1--acquisition-et-préservation"><b>Exercice 1</b></a> ·
+  <a href="#exercice-2--investigation-dun-incident-simulé"><b>Exercice 2</b></a> ·
+  <a href="#corrélation-et-conclusion"><b>Conclusion</b></a> ·
+  <a href="#empreintes-de-référence"><b>Empreintes</b></a> ·
+  <a href="docs/evidence.md"><b>28 captures</b></a>
+</p>
 
 ---
+
+TP de la séance 2 du module *Digital Forensics* (4IIR, EMSI Tanger, 2026/2027). Le dépôt documente la démarche de bout en bout, de la préparation du support de collecte à la conclusion forensic, avec **28 captures annotées**, les scripts utilisés et toutes les empreintes de référence.
+
+<p align="center">
+  <img src="docs/diagrams/key-figures.png" alt="Chiffres clés : 2 dumps mémoire, 3 images disque, 28 captures annotées, persistance datée à 17:55:21 UTC" width="100%">
+</p>
 
 ## En un coup d'œil
 
-| | |
+| Élément | Détail |
 |---|---|
 | **Cible** | VM Windows 10 Pro, 4 Go de RAM, disque de 51 200 Mo, **sans carte réseau** |
 | **Acquisitions** | 2 dumps mémoire · 2 images disque E01 (+ 1 RAW) · 2 triages KAPE · 2 captures d'état vivant |
-| **Intégrité** | MD5, SHA-1 et SHA-256 ; images E01 vérifiées **deux fois** pour l'exercice 2 (dans la VM puis sur la machine d'analyse) |
+| **Intégrité** | MD5, SHA-1 et SHA-256 ; image E01 de l'exercice 2 vérifiée **deux fois** (dans la VM puis sur la machine d'analyse) |
 | **Incident simulé** | PowerShell (T1059.001) et persistance par clé Run (T1547.001), via Atomic Red Team |
-| **Résultat clé** | La persistance retrouvée à la seconde près : clé `Run` modifiée à **17:55:21 UTC**, Prefetch de `reg.exe` créé à **17:55:21 UTC** |
+| **Résultat clé** | Persistance retrouvée à la seconde près : clé `Run` modifiée à **17:55:21 UTC**, Prefetch de `reg.exe` créé à **17:55:21 UTC** |
 | **Constat inattendu** | Quatre autres entrées dans la clé Run, dont trois suspectes : une compromission préexistante du disque |
 
----
-
-## Sommaire
-
-1. [Le laboratoire](#le-laboratoire)
-2. [Méthodologie](#méthodologie)
-3. [Exercice 1 — Acquisition et préservation](#exercice-1--acquisition-et-préservation)
-4. [Exercice 2 — Investigation d'un incident simulé](#exercice-2--investigation-dun-incident-simulé)
-5. [Corrélation et conclusion](#corrélation-et-conclusion)
-6. [Empreintes de référence](#empreintes-de-référence)
-7. [Difficultés rencontrées](#difficultés-rencontrées)
-8. [Limites et réserves](#limites-et-réserves)
-9. [Structure du dépôt](#structure-du-dépôt)
-10. [Reproduire le lab](#reproduire-le-lab)
-11. [Compétences mises en œuvre](#compétences-mises-en-œuvre)
+> **Aucune preuve brute n'est versionnée.** Dumps mémoire, images disque et collectes restent hors Git (voir [`.gitignore`](.gitignore)). Le dépôt contient la méthode, les scripts, les captures commentées et les empreintes qui permettent de vérifier les preuves.
 
 ---
 
@@ -71,13 +82,7 @@ L'ordre suit la **RFC 3227** : on capture d'abord ce qui disparaît le plus vite
 
 ![Ordre d'acquisition, RFC 3227](docs/diagrams/diagram-methodology.png)
 
-| Ordre | Acquisition | Outil | Sortie |
-|---|---|---|---|
-| 1 | RAM | FTK Imager, *Capture Memory* | `.mem` (+ pagefile) |
-| 2 | État réseau et processus | `netstat`, `arp`, `tasklist /v` | fichiers texte |
-| 3 | Disque | FTK Imager, *Physical Drive* | E01 (+ RAW) |
-| 4 | Triage | KAPE, `!SANS_Triage` | dossier de collecte |
-| 5 | Intégrité | FTK (MD5, SHA-1), `Get-FileHash` (SHA-256) | fichiers `.sha256` |
+**E01 ou RAW ?** Les deux formats sont produits pour l'exercice 1, afin de les comparer.
 
 | Critère | E01 | RAW / dd |
 |---|---|---|
@@ -94,7 +99,7 @@ Détail et justifications : [`docs/methodology.md`](docs/methodology.md).
 
 ### Mémoire vive
 
-FTK Imager, *Capture Memory*, avec le pagefile. Le dump fait 4,5 Go, la RAM de la VM.
+FTK Imager, *Capture Memory*, avec le pagefile. Le dump fait 4,5 Go, ce qui est cohérent avec les 4 Go de RAM de la VM.
 
 ![Capture mémoire](docs/screenshots/03-ex1-memory-capture.png)
 
@@ -179,7 +184,7 @@ L'image est chargée dans FTK Imager. Le volume NTFS de Windows est la partition
 
 ![Le dossier AtomicRedTeam dans l'image](docs/screenshots/22-ex2-root-atomicredteam.png)
 
-*`AtomicRedTeam` est présent à la racine, créé le **17:51:21 UTC** : l'installation de l'outil est visible dans l'image.*
+*`AtomicRedTeam` est présent à la racine, créé à **17:51:21 UTC** : l'installation de l'outil est visible dans l'image.*
 
 Le **Prefetch** conserve la trace de l'exécution des programmes :
 
@@ -267,6 +272,9 @@ Pour vérifier une copie : `Get-FileHash -Algorithm SHA256 <fichier>` et compare
 
 ## Difficultés rencontrées
 
+<details>
+<summary><b>Afficher les 8 difficultés et leurs solutions</b></summary>
+
 | Problème | Cause | Solution |
 |---|---|---|
 | « The specified path does not exist » depuis `E:` | Un programme élevé ne voit pas les lecteurs réseau de la session standard | Chemin UNC `\\VBoxSvr\<partage>\...` |
@@ -277,6 +285,8 @@ Pour vérifier une copie : `Get-FileHash -Algorithm SHA256 <fichier>` et compare
 | Vérification de l'E01 très longue dans la VM (3 h) | Relecture à travers le dossier partagé (2,4 Mo/s) | Vérification complémentaire sur la machine d'analyse |
 | `Invoke-AtomicTest` : module non chargé | Installation dans un processus séparé | `Import-Module` dans la session courante |
 | Ruche `NTUSER.DAT` « sale » | Journaux de transaction non fusionnés | Rejeu des `.LOG1` et `.LOG2` en mémoire |
+
+</details>
 
 ## Limites et réserves
 
@@ -289,6 +299,9 @@ Pour vérifier une copie : `Get-FileHash -Algorithm SHA256 <fichier>` et compare
 - **Entrées suspectes du registre** : consignées, non datées individuellement, non attribuées à la simulation.
 
 ## Structure du dépôt
+
+<details>
+<summary><b>Afficher l'arborescence</b></summary>
 
 ```
 .
@@ -305,9 +318,11 @@ Pour vérifier une copie : `Get-FileHash -Algorithm SHA256 <fichier>` et compare
     ├── evidence.md                 28 captures annotées, commentées une à une
     ├── chain-of-custody.md         fiches des exercices 1 et 2
     ├── case-notes.md               journal horodaté et réserves
-    ├── diagrams/                   schémas : architecture, méthodologie, chronologie
+    ├── diagrams/                   bandeau, chiffres clés et schémas (architecture, méthodologie, chronologie)
     └── screenshots/                captures encadrées en rouge (noms floutés)
 ```
+
+</details>
 
 ## Reproduire le lab
 
