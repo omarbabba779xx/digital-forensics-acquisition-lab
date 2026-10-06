@@ -2,7 +2,7 @@
 
 Neuf captures prises pendant l'acquisition (6 octobre 2026). Les cadres rouges numérotés marquent ce que chaque capture **démontre**. Les heures affichées sont celles de la VM, qui avance d'une heure sur l'heure UTC de l'hôte.
 
-> Les captures montrent le nom de machine (`DESKTOP-LIJD7CI`) et le profil utilisateur de la VM. Le dépôt est privé : à anonymiser avant tout partage public.
+> **Anonymisation** : le nom de la machine et le nom du profil utilisateur ont été masqués par un flou gaussien, sans retoucher ni déformer le reste de l'image. Sur la capture 9, les chemins copiés par KAPE contiennent le nom du profil : toute la zone du journal est floutée, seules les lignes de résultat (cadres 1 et 2) restent lisibles.
 
 ---
 
